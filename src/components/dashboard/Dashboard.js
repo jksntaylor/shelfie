@@ -17,12 +17,11 @@ export default class Dashboard extends Component {
                     inventoryList={product} 
                     key={product.id}
                     deleteProduct={this.deleteProduct}
-                    getCurrentProduct={this.props.getCurrentProduct}/>
+                    editCurrentProduct={this.props.editCurrentProduct}/>
                 )
             })
             return (
                 <div>
-                    Dashboard
                     {list}
                 </div>
             )

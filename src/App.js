@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
+import axios from 'axios';
+import {Switch, Route} from 'react-router-dom';
 import './App.css';
 import Dashboard from './components/dashboard/Dashboard';
-import Form from './components/form/Form';
+import AddForm from './components/form/AddForm';
+import EditForm from './components/form/EditForm';
 import Header from './components/header/Header';
-import axios from 'axios'
 
 class App extends Component {
 
@@ -11,11 +13,7 @@ class App extends Component {
     super();
     this.state = {
       inventoryList: [],
-      currentProduct: {
-        name: '',
-        price: 0,
-        img: ''
-      }
+
     }
   }
 
@@ -27,10 +25,12 @@ class App extends Component {
     })
   }
 
-  getCurrentProduct = (product) => {
+  editCurrentProduct = (product) => {
     this.setState({
       currentProduct: product
     })
+    console.log('edit');
+    
   }
 
   componentDidMount() {
@@ -38,18 +38,30 @@ class App extends Component {
   }
   
   render() {
+    console.log(this.state.currentProduct)
     return (
       <div className="App">
        <Header />
-       <Dashboard 
-       inventoryList={this.state.inventoryList}
-       getProducts={this.getInventory}
-       getCurrentProduct={this.getCurrentProduct}
-       />
-       <Form getProducts={this.getInventory}/>
+       <Switch>
+         <Route exact path='/' render={() => <Dashboard
+            inventoryList={this.state.inventoryList}
+            getProducts={this.getInventory}
+            editCurrentProduct={this.editCurrentProduct}
+            />}/>
+          <Route path='/add' render={() => <AddForm 
+            getProducts={this.getInventory}
+            />}/>
+          <Route path='/edit/:id' render={(props) => <EditForm
+            {...props}
+            getProducts={this.getInventory}
+            currentProduct={this.state.currentProduct}
+            />}/>
+       </Switch>
       </div>
     );
   }
 }
 
 export default App;
+
+
