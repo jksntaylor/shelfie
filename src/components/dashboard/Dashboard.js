@@ -1,27 +1,30 @@
 import React, {Component} from 'react';
 import Product from '../product/Product';
+import axios from 'axios';
 
 export default class Dashboard extends Component {
 
-    constructor(props) {
-        super(props)
-        this.state = {
-            inventoryList: this.props.inventoryList
+        deleteProduct = (productID)  => {
+            axios.delete(`/api/inventory/${productID}`).then(() => {
+                this.props.getProducts();
+            })
         }
-    }
 
-    render() {
-
-        let list = this.state.inventoryList.map((product, index) => {
+        render() {
+            let list = this.props.inventoryList.map((product) => {
+                return (
+                    <Product 
+                    inventoryList={product} 
+                    key={product.id}
+                    deleteProduct={this.deleteProduct}
+                    getCurrentProduct={this.props.getCurrentProduct}/>
+                )
+            })
             return (
-                <Product inventoryList={this.state.inventoryList[index]}/>
+                <div>
+                    Dashboard
+                    {list}
+                </div>
             )
-        })
-        return (
-            <div>
-                Dashboard
-                {list}
-            </div>
-        )
-    }
+        }
 }
